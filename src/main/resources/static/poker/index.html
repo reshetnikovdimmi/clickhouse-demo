@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Poker Game - Texas Hold'em</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+    <!-- Лобби -->
+    <div id="lobbyScreen" class="screen active">
+        <div class="lobby-container">
+            <div class="lobby-header">
+                <h1>♠️ Poker Game ♥️</h1>
+                <p class="subtitle">Texas Hold'em</p>
+                <button class="rules-btn" onclick="showRules()">📖 Правила игры</button>
+            </div>
+
+            <div class="lobby-content">
+                <div class="create-game-section">
+                    <h2>🆕 Create New Game</h2>
+                    <div class="form-group">
+                        <input type="text" id="gameName" placeholder="Game Name" value="Texas Hold'em">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Min Bet</label>
+                            <input type="number" id="minBet" value="10" step="10">
+                        </div>
+                        <div class="form-group">
+                            <label>Max Players</label>
+                            <select id="maxPlayers">
+                                <option value="2">2 Players</option>
+                                <option value="4">4 Players</option>
+                                <option value="6" selected>6 Players</option>
+                                <option value="9">9 Players</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Starting Chips</label>
+                            <input type="number" id="startingChips" value="1000" step="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Small Blind</label>
+                            <input type="number" id="smallBlind" value="5">
+                        </div>
+                        <div class="form-group">
+                            <label>Big Blind</label>
+                            <input type="number" id="bigBlind" value="10">
+                        </div>
+                    </div>
+                    <button onclick="createGame()" class="btn-primary">🎲 Create Game</button>
+                </div>
+
+                <div class="games-list-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h2>🎮 Active Games</h2>
+                        <button onclick="loadActiveGames()" class="btn-refresh">🔄 Refresh</button>
+                    </div>
+                    <div id="gamesList" class="games-list">
+                        <div class="loading">Loading games...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="player-info">
+                <div class="form-group">
+                    <label>👤 Your Name</label>
+                    <input type="text" id="playerName" placeholder="Enter your name" maxlength="20">
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>🔗 Or join by Game ID:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="joinGameId" placeholder="Enter Game ID">
+                        <button onclick="joinByGameId()" class="btn-primary" style="width: auto; padding: 10px 20px;">Join</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Игровой стол -->
+    <!-- Модальное окно результатов раздачи -->
+    <div id="handResultModal" class="modal">
+        <div class="modal-content hand-result">
+            <div class="modal-header">
+                <h2>🏆 РЕЗУЛЬТАТ РАЗДАЧИ 🏆</h2>
+            </div>
+            <div class="modal-body" id="handResultBody">
+                <div class="winner-info">
+                    <div class="winner-name" id="winnerName">Dim</div>
+                    <div class="winner-amount" id="winnerAmount">+15 chips</div>
+                </div>
+                <div class="players-stats" id="playersStats">
+                    <!-- Таблица с результатами игроков -->
+                </div>
+                <div class="hand-summary" id="handSummary">
+                    <!-- Комбинации, если были -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="startNewHand()" class="btn-primary" id="newHandBtn">🔄 Начать новую раздачу</button>
+                <button onclick="leaveToLobby()" class="btn-leave">🚪 Выйти в лобби</button>
+            </div>
+        </div>
+    </div>
+    <!-- модальное окно для завершения игры -->
+    <div id="gameEndedModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🏁 ИГРА ЗАВЕРШЕНА 🏁</h2>
+            </div>
+            <div class="modal-body">
+                <div class="game-ended-icon">👋</div>
+                <p id="gameEndedMessage"></p>
+                <div class="remaining-player-info" id="remainingPlayerInfo" style="display: none;">
+                    <strong>Оставшийся игрок:</strong> <span id="remainingPlayerName"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeGameEndedModalAndLeave()" class="btn-primary">Вернуться в лобби</button>
+            </div>
+        </div>
+    </div>
+    <div id="gameScreen" class="screen" style="display: none;">
+        <div class="game-container">
+            <!-- В game-header, рядом с кнопкой Leave Game -->
+            <div class="game-header">
+                <div class="game-info">
+                    <h2 id="gameNameDisplay">Poker Game</h2>
+                    <span class="game-id" id="gameIdDisplay"></span>
+                    <span class="player-name-display" id="currentPlayerName"></span>
+                </div>
+                <div class="pot-info">🏆 Pot: <span id="potAmount">0</span> chips</div>
+                <div class="current-bet">💰 Current bet: <span id="currentBet">0</span></div>
+                <div class="game-actions">
+                    <button onclick="startGame()" class="btn-start" id="startGameBtn" style="display: none;">🎮 Начать раздачу</button>
+                    <button onclick="leaveGame()" class="btn-leave">🚪 Leave Game</button>
+                </div>
+            </div>
+
+            <div class="game-table">
+                <div class="community-cards" id="communityCards">
+                    <div class="card back">?</div>
+                    <div class="card back">?</div>
+                    <div class="card back">?</div>
+                    <div class="card back">?</div>
+                    <div class="card back">?</div>
+                </div>
+
+                <div class="players-area" id="playersArea"></div>
+
+                <div class="action-buttons" id="actionButtons">
+                    <button onclick="sendAction('fold')" class="btn-action fold" id="foldBtn">✗ Fold</button>
+                    <button onclick="sendAction('check')" class="btn-action check" id="checkBtn">✓ Check</button>
+                    <button onclick="sendAction('call')" class="btn-action call" id="callBtn">💰 Call</button>
+                    <div class="raise-control">
+                        <input type="number" id="raiseAmount" placeholder="Amount" min="10" step="10">
+                        <button onclick="sendAction('raise')" class="btn-action raise" id="raiseBtn">📈 Raise</button>
+                    </div>
+                    <button onclick="sendAction('all_in')" class="btn-action allin" id="allinBtn">🔥 All-in</button>
+                </div>
+            </div>
+
+            <div class="chat-section">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
+                    <button onclick="sendChat()">Send</button>
+                </div>
+            </div>
+
+            <div class="game-log" id="gameLog"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Выдвижная панель подсказок -->
+<div class="tips-panel" id="tipsPanel">
+    <div class="tips-tab" onclick="toggleTipsPanel()">
+        <span>💡</span>
+        <span class="tips-tab-text">Советы</span>
+    </div>
+    <div class="tips-panel-content">
+        <div class="tips-header">
+            <h3>💡 Советы по игре</h3>
+            <button class="tips-close" onclick="toggleTipsPanel()">×</button>
+        </div>
+        <div class="tips-list">
+            <div class="tip-card current-situation">
+                <div class="tip-title">🎯 Загрузка...</div>
+                <div class="tip-text">Получение персонального совета...</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-title">💡 Что означают действия?</div>
+                <div class="tip-text"><strong>Fold</strong> - сбросить карты<br><strong>Check</strong> - пропустить ход<br><strong>Call</strong> - уравнять ставку<br><strong>Raise</strong> - поднять ставку<br><strong>All-in</strong> - все фишки</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-title">🎲 Сила позиции</div>
+                <div class="tip-text">Поздняя позиция (ближе к дилеру) - преимущество</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-title">🃏 Когда лучше Raise?</div>
+                <div class="tip-text">- Сильная рука (пары, AK, AQ)<br>- Выгнать слабых игроков<br>- Хорошая позиция</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Кнопка помощи -->
+<button class="help-button" onclick="showRules()">
+    <span>❓</span>
+    <span class="help-text">Правила</span>
+</button>
+
+<!-- Модальное окно с правилами -->
+<div id="rulesModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📖 Правила Техасского Холдема</h2>
+            <button class="modal-close" onclick="closeRules()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <h3>🎯 Цель игры</h3>
+            <p>Выиграть все фишки противников, собрав лучшую комбинацию из 5 карт.</p>
+            <h3>🃏 Комбинации карт (от слабой к сильной)</h3>
+            <ul><li>Старшая карта</li><li>Одна пара</li><li>Две пары</li><li>Сет/Трипс</li><li>Стрит</li><li>Флеш</li><li>Фулл хаус</li><li>Каре</li><li>Стрит-флеш</li><li>Роял-флеш</li></ul>
+            <h3>🎮 Этапы игры</h3>
+            <ul><li>Pre-flop</li><li>Flop</li><li>Turn</li><li>River</li><li>Showdown</li></ul>
+            <h3>🎯 Действия</h3>
+            <ul><li>Fold - сбросить карты</li><li>Check - пропустить ход</li><li>Call - уравнять ставку</li><li>Raise - поднять ставку</li><li>All-in - поставить все фишки</li></ul>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeRules()" class="btn-primary">Понятно!</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/poker.js"></script>
+<script src="js/websocket.js"></script>
+</body>
+</html>

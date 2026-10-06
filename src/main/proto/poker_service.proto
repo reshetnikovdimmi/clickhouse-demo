@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package com.example.clickhouse.grpc;
+
+option java_package = "com.example.clickhouse.grpc";
+option java_multiple_files = true;
+
+// =====================================================
+// Покер gRPC сервис
+// =====================================================
+
+service PokerService {
+  // Игрок подключается к игре (двунаправленный стриминг)
+  rpc JoinGame(stream PlayerAction) returns (stream GameEvent);
+
+  // Создать новую игру
+  rpc CreateGame(CreateGameRequest) returns (CreateGameResponse);
+
+  // Получить список активных игр
+  rpc GetActiveGames(Empty) returns (GamesList);
+
+  // Получить статистику игры
+  rpc GetGameStats(GameStatsRequest) returns (GameStatsResponse);
+
+  // Получить историю действий
+  rpc GetGameHistory(GameHistoryRequest) returns (GameHistoryResponse);
+}
+
+// =====================================================
+// Сообщения для запросов и ответов
+// =====================================================
+
+// Пустое сообщение
+message Empty {}
+
+// Действие игрока
+message PlayerAction {
+  string player_id = 1;
+  string game_id = 2;
+  string action = 3;        // fold, check, call, raise, all_in, bet
+  int32 bet_amount = 4;
+  int64 timestamp = 5;
+}
+
+// Событие игры
+message GameEvent {
+  string event_type = 1;    // game_started, player_joined, player_action,
+  // card_dealt, round_ended, game_ended, error
+  string game_id = 2;
+  string data = 3;          // JSON строка с данными события
+  int64 timestamp = 4;
+}
+
+// Запрос на создание игры
+message CreateGameRequest {
+  string game_name = 1;
+  int32 min_bet = 2;
+  int32 max_players = 3;
+  int32 starting_chips = 4;
+  int32 small_blind = 5;
+  int32 big_blind = 6;
+}
+
+// Ответ на создание игры
+message CreateGameResponse {
+  bool success = 1;
+  string game_id = 2;
+  string message = 3;
+  int32 created_at = 4;
+}
+
+// Запрос статистики игры
+message GameStatsRequest {
+  string game_id = 1;
+}
+
+// Статистика игры
+message GameStatsResponse {
+  string game_id = 1;
+  string game_name = 2;
+  string game_state = 3;
+  int32 pot = 4;
+  int32 current_bet = 5;
+  int32 players_count = 6;
+  int32 max_players = 7;
+  int32 small_blind = 8;
+  int32 big_blind = 9;
+  int64 started_at = 10;
+  repeated PlayerStat players = 11;
+}
+
+// Статистика игрока
+message PlayerStat {
+  string player_id = 1;
+  string player_name = 2;
+  int32 chips = 3;
+  int32 current_bet = 4;
+  bool is_active = 5;
+  bool is_dealer = 6;
+}
+
+// Список игр
+message GamesList {
+  repeated GameInfo games = 1;
+}
+
+// Информация об игре
+message GameInfo {
+  string game_id = 1;
+  string game_name = 2;
+  string status = 3;
+  int32 players_count = 4;
+  int32 pot = 5;
+  int64 created_at = 6;
+}
+
+// Запрос истории игры
+message GameHistoryRequest {
+  string game_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+
+// История игры
+message GameHistoryResponse {
+  string game_id = 1;
+  repeated HistoryAction actions = 2;
+  int32 total_count = 3;
+}
+
+// Действие в истории
+message HistoryAction {
+  string player_id = 1;
+  string player_name = 2;
+  string action = 3;
+  int32 bet_amount = 4;
+  int32 round_number = 5;
+  int64 action_time = 6;
+}

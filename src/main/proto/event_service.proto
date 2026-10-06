@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package com.example.clickhouse.grpc;
+
+option java_package = "com.example.clickhouse.grpc";
+option java_multiple_files = true;
+
+// Сервис для работы с событиями
+service EventService {
+  // Двунаправленный стриминг событий
+  rpc StreamEvents(stream EventRequest) returns (stream EventResponse);
+
+  // Обычный unary запрос для отправки одного события
+  rpc SendEvent(EventRequest) returns (EventResponse);
+}
+
+// Запрос с событием
+message EventRequest {
+  string user_id = 1;
+  string event_type = 2;
+  string page_url = 3;
+  string user_agent = 4;
+  string ip_address = 5;
+  double event_value = 6;
+  int64 timestamp = 7;
+}
+
+// Ответ сервера
+message EventResponse {
+  bool success = 1;
+  string message = 2;
+  int64 event_id = 3;
+  string received_at = 4;
+  int32 processed_count = 5;
+}

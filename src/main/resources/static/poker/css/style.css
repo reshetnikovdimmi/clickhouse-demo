@@ -1,0 +1,1266 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0a2e1a 0%, #1a5a2a 100%);
+    min-height: 100vh;
+    color: white;
+}
+
+.app {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.screen {
+    animation: fadeIn 0.3s ease;
+    transition: opacity 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==================== ЛОББИ ==================== */
+
+.lobby-container {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 30px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.lobby-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.lobby-header h1 {
+    font-size: 3em;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #ccc;
+    font-size: 1.1em;
+}
+
+.lobby-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.create-game-section, .games-list-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.create-game-section h2, .games-list-section h2 {
+    margin-bottom: 20px;
+    color: #ffd700;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #ffd700;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: #ffaa00;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #1a472a;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+}
+
+.btn-refresh {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid #ffd700;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-refresh:hover {
+    background: rgba(255, 215, 0, 0.3);
+    transform: rotate(180deg);
+}
+
+.games-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.game-card {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.game-card:hover {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: #ffd700;
+    transform: translateX(5px);
+}
+
+.game-card h3 {
+    margin-bottom: 8px;
+}
+
+.game-card .game-details {
+    font-size: 0.85em;
+    color: #ccc;
+}
+
+.game-status {
+    font-size: 0.85em;
+    color: #4caf50;
+    margin-top: 5px;
+}
+
+.game-players {
+    font-size: 11px;
+    color: #4caf50;
+    margin-top: 5px;
+}
+
+.player-info {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ==================== ИГРОВОЙ СТОЛ ==================== */
+
+.game-container {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 30px;
+    padding: 20px;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+}
+
+.game-info h2 {
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.game-id {
+    font-size: 12px;
+    color: #ccc;
+}
+
+.player-name-display {
+    margin-left: 15px;
+    padding: 5px 10px;
+    background: rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.pot-info, .current-bet {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.pot-info span, .current-bet span {
+    color: #ffd700;
+    font-size: 22px;
+}
+
+.btn-leave {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-leave:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Игровой стол */
+.game-table {
+    background: radial-gradient(circle, #2e7d32 0%, #1b5e20 100%);
+    border-radius: 200px;
+    padding: 40px;
+    position: relative;
+    min-height: 550px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 5px solid rgba(139, 69, 19, 0.5);
+}
+
+/* Общие карты */
+.community-cards {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 50px;
+    min-height: 130px;
+}
+
+.card {
+    width: 80px;
+    height: 110px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+    transition: transform 0.3s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.card.front {
+    background: white;
+}
+
+.card.back {
+    background: repeating-linear-gradient(45deg, #2c3e50, #2c3e50 10px, #34495e 10px, #34495e 20px);
+    color: transparent;
+}
+
+/* Цвета мастей */
+.card.red, .mini-card.red {
+    color: #ff4444;
+}
+
+.card.black, .mini-card.black {
+    color: #000000;
+}
+
+/* Карточка игрока */
+.player-card {
+    background: rgba(0, 0, 0, 0.85);
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid #555;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Текущий игрок */
+.player-card.current-player {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.85));
+    transform: scale(1.05);
+}
+
+/* Сбросивший игрок */
+.player-card.folded {
+    opacity: 0.5;
+    filter: grayscale(0.3);
+}
+
+/* All-in игрок */
+.player-card.allin {
+    background: linear-gradient(135deg, rgba(103, 58, 183, 0.8), rgba(156, 39, 176, 0.8));
+    border-color: #ff9800;
+    animation: pulse 1s infinite;
+}
+
+/* Дилер */
+.player-card.dealer {
+    border-color: gold;
+}
+
+/* Имя игрока */
+.player-card .player-name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #ffd700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Фишки */
+.player-card .player-chips {
+    color: #4caf50;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Текущая ставка */
+.player-card .player-bet {
+    font-size: 12px;
+    color: #ff9800;
+    margin: 5px 0;
+    font-weight: bold;
+    background: rgba(255, 152, 0, 0.2);
+    padding: 2px 8px;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+/* Карты игрока */
+.player-cards {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* Маленькие карты */
+.mini-card {
+    width: 45px;
+    height: 60px;
+    background: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s;
+}
+
+.mini-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Рубашка карты (скрытая карта) */
+.mini-card.back {
+    background: repeating-linear-gradient(45deg, #2c3e50, #2c3e50 8px, #34495e 8px, #34495e 16px);
+    color: transparent;
+    position: relative;
+}
+
+.mini-card.back::after {
+    content: '?';
+    position: absolute;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+}
+
+/* Статус игрока */
+.player-status {
+    font-size: 11px;
+    margin-top: 8px;
+    color: #ffaa00;
+    font-weight: bold;
+}
+
+.allin-badge {
+    background: #ff9800;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    animation: pulse 1s infinite;
+}
+
+/* Кнопки действий */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-action:not(:disabled):hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-action.fold { background: #e74c3c; color: white; }
+.btn-action.check { background: #3498db; color: white; }
+.btn-action.call { background: #2ecc71; color: white; }
+.btn-action.raise { background: #f39c12; color: white; }
+.btn-action.allin { background: #9b59b6; color: white; }
+
+.raise-control {
+    display: flex;
+    gap: 10px;
+}
+
+.raise-control input {
+    width: 100px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.raise-control input:focus {
+    outline: 2px solid #f39c12;
+}
+
+/* Чат */
+.chat-section {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.chat-message {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+.chat-message.system {
+    color: #ffd700;
+    font-style: italic;
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.chat-message .sender {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.chat-message .text {
+    margin-left: 10px;
+}
+
+.system-message {
+    color: #ffd700;
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.chat-input input:focus {
+    outline: 2px solid #ffd700;
+}
+
+.chat-input button {
+    padding: 10px 20px;
+    background: #ffd700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.chat-input button:hover {
+    background: #ffaa00;
+    transform: scale(1.05);
+}
+
+/* Лог игры */
+.game-log {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 10px;
+    height: 120px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+.game-log-entry {
+    color: #ccc;
+    margin-bottom: 5px;
+    padding: 2px 5px;
+    border-left: 2px solid #ffd700;
+}
+
+/* Анимации */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+@keyframes cardDeal {
+    from { transform: rotate(-180deg) scale(0); opacity: 0; }
+    to { transform: rotate(0) scale(1); opacity: 1; }
+}
+
+.card {
+    animation: cardDeal 0.3s ease-out;
+}
+
+/* Скроллбары */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ffd700;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffaa00;
+}
+
+/* ==================== ПОДСКАЗКИ ==================== */
+
+.tips-panel {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+}
+
+.tips-tab {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #1a472a;
+    padding: 12px 8px;
+    border-radius: 0 12px 12px 0;
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+}
+
+.tips-tab:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #ffea00, #ffcc00);
+}
+
+.tips-tab span:first-child {
+    font-size: 24px;
+    writing-mode: horizontal-tb;
+}
+
+.tips-tab-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.tips-panel-content {
+    position: fixed;
+    left: -320px;
+    top: 0;
+    width: 320px;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(26, 71, 42, 0.98), rgba(10, 46, 26, 0.98));
+    backdrop-filter: blur(10px);
+    border-right: 2px solid #ffd700;
+    transition: left 0.3s ease;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.tips-panel.open .tips-panel-content {
+    left: 0;
+}
+
+.tips-panel.open .tips-tab {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tips-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #1a472a;
+}
+
+.tips-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.tips-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #1a472a;
+    font-weight: bold;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.tips-close:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+.tips-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.tip-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.tip-card:hover {
+    background: rgba(255, 215, 0, 0.15);
+    transform: translateX(5px);
+}
+
+.tip-card.current-situation {
+    background: rgba(255, 215, 0, 0.2);
+    border-left-color: #ffd700;
+}
+
+.tip-title {
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.tip-text {
+    font-size: 12px;
+    color: #ddd;
+    line-height: 1.4;
+}
+
+.tip-text br {
+    margin-bottom: 5px;
+    display: block;
+    content: "";
+}
+
+.tip-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.tips-rules-btn {
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid #ffd700;
+    color: #ffd700;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.tips-rules-btn:hover {
+    background: rgba(255, 215, 0, 0.4);
+    transform: scale(1.02);
+}
+
+/* Кнопка помощи */
+.help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #1a472a;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    font-size: 24px;
+    transition: all 0.2s;
+}
+
+.help-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.help-text {
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+/* Кнопка правил в лобби */
+.rules-btn {
+    margin-top: 15px;
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid #ffd700;
+    color: #ffd700;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.rules-btn:hover {
+    background: rgba(255, 215, 0, 0.4);
+    transform: scale(1.05);
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a472a, #0a2e1a);
+    border-radius: 20px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 2px solid #ffd700;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.modal-header h2 {
+    color: #ffd700;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #ffd700;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-body h3 {
+    color: #ffd700;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.modal-body ul {
+    margin-left: 20px;
+    color: #ccc;
+}
+
+.modal-body li {
+    margin-bottom: 5px;
+}
+
+.modal-footer {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .lobby-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .card {
+        width: 50px;
+        height: 70px;
+        font-size: 18px;
+    }
+
+    .mini-card {
+        width: 35px;
+        height: 48px;
+        font-size: 12px;
+    }
+
+    .player-card {
+        min-width: 130px;
+        padding: 10px;
+    }
+
+    .action-buttons {
+        gap: 8px;
+    }
+
+    .btn-action {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
+    .raise-control input {
+        width: 70px;
+        padding: 8px;
+    }
+
+    .game-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .players-area.players-2 {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .players-area.players-3 {
+        flex-direction: column;
+    }
+
+    .players-area.players-3 .player-card:first-child,
+    .players-area.players-3 .player-card:nth-child(2),
+    .players-area.players-3 .player-card:nth-child(3) {
+        position: static;
+        left: auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
+    }
+
+    .players-area.players-4 {
+        grid-template-areas:
+            "top-left top-right"
+            "bottom-left bottom-right";
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .player-card {
+        width: 100% !important;
+        max-width: 250px;
+    }
+
+    .tips-panel-content {
+        width: 280px;
+    }
+
+    .help-button {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}
+/* ==================== РАСПОЛОЖЕНИЕ ИГРОКОВ ==================== */
+
+.players-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    min-height: 350px;
+    margin-top: 20px;
+}
+
+/* 2 игрока - по бокам (слева и справа) */
+.players-area.players-2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.players-area.players-2 .player-card:first-child {
+    margin-right: auto;
+}
+
+.players-area.players-2 .player-card:last-child {
+    margin-left: auto;
+}
+
+/* 3 игрока - треугольником */
+.players-area.players-3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    height: 300px;
+}
+
+/* 4 игрока - квадратом (по углам) */
+.players-area.players-4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    padding: 20px 60px;
+    height: 300px;
+}
+
+.players-area.players-4 .player-card:first-child {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    align-self: start;
+}
+
+.players-area.players-4 .player-card:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: start;
+}
+
+.players-area.players-4 .player-card:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    align-self: end;
+}
+
+.players-area.players-4 .player-card:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    align-self: end;
+}
+
+/* 5-6 игроков - кругом */
+.players-area.players-5,
+.players-area.players-6 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    height: auto;
+    min-height: 320px;
+}
+
+.players-area.players-5 .player-card,
+.players-area.players-6 .player-card {
+    width: 170px;
+}
+
+/* 7-9 игроков - компактно */
+.players-area.players-7,
+.players-area.players-8,
+.players-area.players-9 {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px;
+    height: auto;
+}
+/* Модальное окно результатов раздачи */
+.hand-result {
+    max-width: 500px;
+    text-align: center;
+}
+
+.winner-info {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.winner-name {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1a472a;
+}
+
+.winner-amount {
+    font-size: 24px;
+    color: #1a472a;
+    margin-top: 5px;
+}
+
+.players-stats {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.player-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.player-stat .name {
+    font-weight: bold;
+}
+
+.player-stat .change.positive {
+    color: #4caf50;
+}
+
+.player-stat .change.negative {
+    color: #f44336;
+}
+
+.hand-summary {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+/* Стили для модального окна завершения игры */
+#gameEndedModal .modal-content {
+    max-width: 450px;
+    text-align: center;
+    animation: slideIn 0.3s ease-out;
+}
+
+#gameEndedModal .modal-body {
+    padding: 30px 20px;
+}
+
+.game-ended-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: bounce 0.5s ease-out;
+}
+
+#gameEndedMessage {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 20px 0;
+    color: #555;
+}
+
+.remaining-player-info {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.remaining-player-info strong {
+    color: #2c3e50;
+}
+
+.remaining-player-info span {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+.game-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-start {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn-start:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+
+.btn-start:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
